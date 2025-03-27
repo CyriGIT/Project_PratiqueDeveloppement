@@ -1,0 +1,8 @@
+Gérer correctement les transactions ACID (actuellement, on profite de l'autocommit...)
+Intégrer une librairie SQL (Spring JDBC Template, JooQ, JDBI3...)
+Intégrer un framework ORM (JPA/Hibernate, MyBatis)
+Mettre en oeuvre Spring Core afin de profiter d'un containeur d'injection
+Réaliser un front-end pour l'application grâce à une technologie côté serveur (Spring MVC par exemple)
+Réaliser un front-end pour l'application grâce à une technologie côté client (VueJS par exemple)
+Mettre en place de la sécurité (Spring Security grâce au mécanisme de votre choix)
+Proposer d'autres services WEB dans l'application
