@@ -30,25 +30,25 @@ public class AllocationService {
     return allocationMapper.findAll();
   }
 
-  public String getParentDroitAllocation(Map<String, Object> parameters) {
+  public String getParentDroitAllocation(ParentDroitAllocationDemande demande) {
     System.out.println("Déterminer quel parent a le droit aux allocations");
-    String eR = (String)parameters.getOrDefault("enfantResidence", "");
-    Boolean p1AL = (Boolean)parameters.getOrDefault("parent1ActiviteLucrative", false);
-    String p1Residence = (String)parameters.getOrDefault("parent1Residence", "");
-    Boolean p2AL = (Boolean)parameters.getOrDefault("parent2ActiviteLucrative", false);
-    String p2Residence = (String)parameters.getOrDefault("parent2Residence", "");
-    Boolean pEnsemble = (Boolean)parameters.getOrDefault("parentsEnsemble", false);
-    Number salaireP1 = (Number) parameters.getOrDefault("parent1Salaire", BigDecimal.ZERO);
-    Number salaireP2 = (Number) parameters.getOrDefault("parent2Salaire", BigDecimal.ZERO);
+    String eR = demande.getEnfantResidence();
+    Boolean p1AL = demande.isParent1ActiviteLucrative();
+    String p1Residence = demande.getParent1Residence();
+    Boolean p2AL = demande.isParent2ActiviteLucrative();
+    String p2Residence = demande.getParent2Residence();
+    Boolean pEnsemble = demande.isParentsEnsemble();
+    BigDecimal salaireP1 = demande.getParent1Salaire();
+    BigDecimal salaireP2 = demande.getParent2Salaire();
 
-    if(p1AL && !p2AL) {
+    if (p1AL && !p2AL) {
       return PARENT_1;
     }
 
-    if(p2AL && !p1AL) {
+    if (p2AL && !p1AL) {
       return PARENT_2;
     }
 
-    return salaireP1.doubleValue() > salaireP2.doubleValue() ? PARENT_1 : PARENT_2;
+    return salaireP1.compareTo(salaireP2) > 0 ? PARENT_1 : PARENT_2;
   }
 }
