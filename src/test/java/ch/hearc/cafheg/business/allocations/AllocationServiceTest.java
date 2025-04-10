@@ -71,77 +71,67 @@ class AllocationServiceTest {
   }
 
   @Test
-  @DisplayName("Vérifier que parent 1 est actif et à un plus grand salaire")
+  @DisplayName("Vérifier que parent 1 est actif et le parent 2 inactif")
   void getParentDroitAllocation_WhenParent1IsActiveAndParent2Inactive_ShouldReturnParent1() {
     ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
     demande.setParent1ActiviteLucrative(true);
     demande.setParent2ActiviteLucrative(false);
     demande.setParent1Salaire(BigDecimal.valueOf(1000.00));
-    demande.setParent1Salaire(BigDecimal.valueOf(999.99));
+    demande.setParent2Salaire(BigDecimal.valueOf(0.00));
 
     String resultat = allocationService.getParentDroitAllocation(demande);
 
     assertThat(resultat).isEqualTo("Parent1");
   }
-/*
-  @Test
-  @DisplayName("Vérifier que parent 2 est actif et à un plus grand salaire")
-  void getParentDroitAllocation_WhenParent2IsActiveAndParent1Inactive_ShouldReturnParent2() {
-    Map<String, Object> params = new HashMap<>();
-    params.put("parent1ActiveLucrative", false);
-    params.put("parent2ActiveLucrative", true);
-    params.put("parent1Salaire",BigDecimal.valueOf(999.00));
-    params.put("parent2Salaire",BigDecimal.valueOf(1000.00));
-    String resultat = allocationService.getParentDroitAllocation(params);
-    assertThat(resultat).isEqualTo("Parent2");
-  }
 
   @Test
-  @DisplayName("Vérifier que les deux parents sont inactifs et P1 salaire > P2 salaire")
-  void getParentDroitAllocation_WhenBothParentsAreInactiveButSalaire1IsBigger_ShouldRetrunPartent1(){
-    Map<String, Object> params = new HashMap<>();
-    params.put("parent1ActiveLucrative", false);
-    params.put("parent2ActiveLucrative", false);
-    params.put("parent1Salaire",BigDecimal.valueOf(1000.00));
-    params.put("parent2Salaire",BigDecimal.valueOf(999.00));
-    String resultat = allocationService.getParentDroitAllocation(params);
+  @DisplayName("Si les deux parents ont une activité lucrative, celui qui a l'autorité parentale a les allocs")
+  void getParentDroitAllocation_WhenBothParentsHaveActivityAndParent1HasParentalAuthority_ShouldReturnParent1() {
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    demande.setParent1ActiviteLucrative(true);
+    demande.setParent2ActiviteLucrative(true);
+    demande.setParent1AutoriteParentale(true);
+    demande.setParent2AutoriteParentale(false);
+    String resultat = allocationService.getParentDroitAllocation(demande);
     assertThat(resultat).isEqualTo("Parent1");
   }
+  /*
+  @Test
+  @DisplayName
 
   @Test
-  @DisplayName("Vérifier que les deux parents sont inactifs et P1 salaire < P2 salaire")
-  void getParentDroitAllocation_WhenBothParentsAreInactiveButSalaire2IsBigger_ShouldReturnParent2(){
-    Map<String, Object> params = new HashMap<>();
-    params.put("parent1ActiveLucrative", false);
-    params.put("parent2ActiveLucrative", false);
-    params.put("parent1Salaire",BigDecimal.valueOf(999.00));
-    params.put("parent2Salaire",BigDecimal.valueOf(1000.00));
-    String resultat = allocationService.getParentDroitAllocation(params);
+  @DisplayName("Vérifier que parent 2 est actif et le parent 1 inactif")
+  void getParentDroitAllocation_WhenParent2IsActiveAndHasBiggerSalary_ShouldReturnParent2() {
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    demande.setParent1ActiviteLucrative(false);
+    demande.setParent2ActiviteLucrative(true);
+    demande.setParent1Salaire(BigDecimal.valueOf(1000.00));
+    demande.setParent2Salaire(BigDecimal.valueOf(2000.00));
+    String resultat = allocationService.getParentDroitAllocation(demande);
     assertThat(resultat).isEqualTo("Parent2");
-
   }
 
   @Test
   @DisplayName("Vérifier que les deux parents sont actifs et P1 salaire > P2 salaire")
-  void getParentDroitAllocation_WhenBothParentsAreActiveButSalaire1IsBigger_ShouldReturnParent1(){
-    Map<String, Object> params = new HashMap<>();
-    params.put("parent1ActiveLucrative", true);
-    params.put("parent2ActiveLucrative", true);
-    params.put("parent1Salaire",BigDecimal.valueOf(1000.00));
-    params.put("parent2Salaire",BigDecimal.valueOf(999.00));
-    String resultat = allocationService.getParentDroitAllocation(params);
+  void getParentDroitAllocation_WhenBothParentsAreInactiveButParent1HasBiggerSalary_ShouldReturnParent1(){
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    demande.setParent1ActiviteLucrative(true);
+    demande.setParent2ActiviteLucrative(true);
+    demande.setParent1Salaire(BigDecimal.valueOf(2000.00));
+    demande.setParent2Salaire(BigDecimal.valueOf(1000.00));
+    String resultat = allocationService.getParentDroitAllocation(demande);
     assertThat(resultat).isEqualTo("Parent1");
   }
 
   @Test
-  @DisplayName("Vérifer que les deux parents sont actifs et P1 salaire < P2 salaire")
-  void getParentDroitAllocation_WhenBothParentsAreActiveButSalaire2IsBigger_ShouldReturnParent2(){
-    Map<String, Object> params = new HashMap<>();
-    params.put("parent1ActiveLucrative", true);
-    params.put("parent2ActiveLucrative", true);
-    params.put("parent1Salaire",BigDecimal.valueOf(999.00));
-    params.put("parent2Salaire",BigDecimal.valueOf(1000.00));
-    String resultat = allocationService.getParentDroitAllocation(params);
+  @DisplayName("Vérifier que les deux parents sont inactifs et P1 salaire > P2 salaire")
+  void getParentDroitAllocation_WhenBothParentsAreInactiveButParent2HasBiggerSalary_ShouldReturnParent2(){
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    demande.setParent1ActiviteLucrative(false);
+    demande.setParent2ActiviteLucrative(false);
+    demande.setParent1Salaire(BigDecimal.valueOf(2000.00));
+    demande.setParent2Salaire(BigDecimal.valueOf(1000.00));
+    String resultat = allocationService.getParentDroitAllocation(demande);
     assertThat(resultat).isEqualTo("Parent2");
   }
 

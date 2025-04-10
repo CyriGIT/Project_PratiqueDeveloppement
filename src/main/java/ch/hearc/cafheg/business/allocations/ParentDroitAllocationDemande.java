@@ -6,8 +6,10 @@ public class ParentDroitAllocationDemande {
     private String enfantResidence;
     private boolean parent1ActiviteLucrative;
     private String parent1Residence;
+    private boolean parent1AutoriteParentale;
     private boolean parent2ActiviteLucrative;
     private String parent2Residence;
+    private boolean parent2AutoriteParentale;
     private boolean parentsEnsemble;
     private BigDecimal parent1Salaire;
     private BigDecimal parent2Salaire;
@@ -37,6 +39,14 @@ public class ParentDroitAllocationDemande {
         this.parent1Residence = parent1Residence;
     }
 
+    public boolean isParent1AutoriteParentale() {
+        return parent1AutoriteParentale;
+    }
+
+    public void setParent1AutoriteParentale(boolean parent1AutoriteParentale) {
+        this.parent1AutoriteParentale = parent1AutoriteParentale;
+    }
+
     public boolean isParent2ActiviteLucrative() {
         return parent2ActiviteLucrative;
     }
@@ -47,6 +57,14 @@ public class ParentDroitAllocationDemande {
 
     public String getParent2Residence() {
         return parent2Residence;
+    }
+
+    public boolean isParent2AutoriteParentale() {
+        return parent2AutoriteParentale;
+    }
+
+    public void setParent2AutoriteParentale(boolean parent2AutoriteParentale) {
+        this.parent2AutoriteParentale = parent2AutoriteParentale;
     }
 
     public void setParent2Residence(String parent2Residence) {
