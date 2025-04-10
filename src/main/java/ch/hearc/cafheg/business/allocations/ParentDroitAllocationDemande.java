@@ -5,9 +5,11 @@ import java.math.BigDecimal;
 public class ParentDroitAllocationDemande {
     private String enfantResidence;
     private boolean parent1ActiviteLucrative;
+    private String parent1LieuActivite;
     private String parent1Residence;
     private boolean parent1AutoriteParentale;
     private boolean parent2ActiviteLucrative;
+    private String parent2LieuActivite;
     private String parent2Residence;
     private boolean parent2AutoriteParentale;
     private boolean parentsEnsemble;
@@ -29,6 +31,14 @@ public class ParentDroitAllocationDemande {
 
     public void setParent1ActiviteLucrative(boolean parent1ActiviteLucrative) {
         this.parent1ActiviteLucrative = parent1ActiviteLucrative;
+    }
+
+    public String getParent1LieuActivite() {
+        return parent1LieuActivite;
+    }
+
+    public void setParent1LieuActivite(String parent1LieuActivite) {
+        this.parent1LieuActivite = parent1LieuActivite;
     }
 
     public String getParent1Residence() {
@@ -53,6 +63,14 @@ public class ParentDroitAllocationDemande {
 
     public void setParent2ActiviteLucrative(boolean parent2ActiviteLucrative) {
         this.parent2ActiviteLucrative = parent2ActiviteLucrative;
+    }
+
+    public String getParent2LieuActivite() {
+        return parent2LieuActivite;
+    }
+
+    public void setParent2LieuActivite(String parent2LieuActivite) {
+        this.parent2LieuActivite = parent2LieuActivite;
     }
 
     public String getParent2Residence() {
