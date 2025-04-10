@@ -95,10 +95,42 @@ class AllocationServiceTest {
     String resultat = allocationService.getParentDroitAllocation(demande);
     assertThat(resultat).isEqualTo("Parent1");
   }
-  /*
-  @Test
-  @DisplayName
 
+  @Test
+  @DisplayName("Si les deux parents ont une activité lucrative et l'autorité parentale et qu'ils sont séparés, celui qui vit avec l'enfant a le droit aux allocations")
+  void getParentDroitAllocation_WhenBothParentsHaveActivityAndParentalAuthorityAndSeparated_ShouldReturnParent1() {
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    demande.setParent1ActiviteLucrative(true);
+    demande.setParent2ActiviteLucrative(true);
+    demande.setParent1AutoriteParentale(true);
+    demande.setParent2AutoriteParentale(true);
+    demande.setParentsEnsemble(false);
+    demande.setParent1Residence("NE");
+    demande.setParent2Residence("GE");
+    demande.setEnfantResidence("NE");
+    String resultat = allocationService.getParentDroitAllocation(demande);
+    assertThat(resultat).isEqualTo("Parent1");
+  }
+
+  @Test
+  @DisplayName("Si les deux parents travaillent, ont l'autorité parentale, vivent ensemble, celui qui travaille dans le canton de domicile de l'enfant a droit aux allocs")
+    void getParentDroitAllocation_WhenBothParentsHaveActivityAndParentalAuthorityAndLiveTogether_ShouldReturnParent1() {
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    demande.setParent1ActiviteLucrative(true);
+    demande.setParent2ActiviteLucrative(true);
+    demande.setParent1AutoriteParentale(true);
+    demande.setParent2AutoriteParentale(true);
+    demande.setParentsEnsemble(true);
+    demande.setParent1Residence("GE");
+    demande.setParent2Residence("GE");
+    demande.setParent1LieuActivite("NE");
+    demande.setParent2LieuActivite("GE");
+    demande.setEnfantResidence("NE");
+    String resultat = allocationService.getParentDroitAllocation(demande);
+    assertThat(resultat).isEqualTo("Parent1");
+  }
+
+/*
   @Test
   @DisplayName("Vérifier que parent 2 est actif et le parent 1 inactif")
   void getParentDroitAllocation_WhenParent2IsActiveAndHasBiggerSalary_ShouldReturnParent2() {
