@@ -14,6 +14,7 @@ public class AllocataireMapper extends Mapper {
   private static final String QUERY_FIND_ALL = "SELECT NOM,PRENOM,NO_AVS FROM ALLOCATAIRES";
   private static final String QUERY_FIND_WHERE_NOM_LIKE = "SELECT NOM,PRENOM,NO_AVS FROM ALLOCATAIRES WHERE NOM LIKE ?";
   private static final String QUERY_FIND_WHERE_NUMERO = "SELECT NO_AVS, NOM, PRENOM FROM ALLOCATAIRES WHERE NUMERO=?";
+  private static final String QUERY_UPDATE_ALLOCATAIRE = "UPDATE ALLOCATAIRES SET NOM=?, PRENOM=? WHERE NO_AVS=?";
 
   public List<Allocataire> findAll(String likeNom) {
     System.out.println("findAll() " + likeNom);
@@ -69,4 +70,18 @@ public class AllocataireMapper extends Mapper {
       throw new RuntimeException(e);
     }
   }
+
+    public void updateAllocataire(Allocataire allocataire) {
+        System.out.println("updateAllocataire() " + allocataire);
+        Connection connection = activeJDBCConnection();
+        try {
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY_UPDATE_ALLOCATAIRE);
+        preparedStatement.setString(1, allocataire.getNom());
+        preparedStatement.setString(2, allocataire.getPrenom());
+        preparedStatement.setString(3, allocataire.getNoAVS().getValue());
+        preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+        throw new RuntimeException(e);
+        }
+    }
 }
