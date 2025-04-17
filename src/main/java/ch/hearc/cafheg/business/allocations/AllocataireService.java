@@ -1,14 +1,18 @@
 package ch.hearc.cafheg.business.allocations;
 import ch.hearc.cafheg.infrastructure.persistance.AllocataireMapper;
+import ch.hearc.cafheg.infrastructure.persistance.VersementMapper;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class AllocataireService {
     private final AllocataireMapper allocataireMapper;
+    private final VersementMapper versementMapper;
     private List<Allocataire> allocatairesActuels;
 
-    public AllocataireService(AllocataireMapper allocataireMapper) {
+    public AllocataireService(AllocataireMapper allocataireMapper, VersementMapper versementMapper) {
         this.allocataireMapper = allocataireMapper;
+        this.versementMapper = versementMapper;
     }
 
     public List<Allocataire> findAllAllocataires(String likeNom) {
@@ -31,6 +35,20 @@ public class AllocataireService {
             }
         }
     }
+
+    public boolean deleteAllocataireByIdIfNoVersements(long id) {
+        Allocataire allocataire = allocataireMapper.findById(id);
+        if (allocataire == null) {
+            throw new NoSuchElementException("Allocataire introuvable");
+        }
+        if (versementMapper.hasVersementsForAllocataire(id)) {
+            return false;
+        }
+        allocataireMapper.deleteById(id);
+        return true;
+    }
+
+
 }
 
 
