@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+
+        <!-- Console pour DEBUG -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- Fichier pour les erreurs dans packages contenant "ch" -->
+        <File name="ErrorFile" fileName="logs/err.log" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"/>
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+        </File>
+
+        <!-- Fichier pour les logs info journaliers dans services -->
+        <RollingFile name="ServiceFile"
+                     fileName="logs/cafheg_%d{yyyy-MM-dd}.log"
+                     filePattern="logs/cafheg_%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- Logger pour tout package contenant "ch" (comme ch.hearc...) -->
+        <Logger name="ch" level="error" additivity="false">
+            <AppenderRef ref="ErrorFile"/>
+        </Logger>
+
+        <!-- Logger spécifique pour tes services métiers -->
+        <Logger name="ch.hearc.cafheg.business" level="info" additivity="false">
+            <AppenderRef ref="ServiceFile"/>
+        </Logger>
+
+        <!-- Logger racine pour tous les packages (console) -->
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
