@@ -130,25 +130,43 @@ class AllocationServiceTest {
     assertThat(resultat).isEqualTo("Parent1");
   }
 
-/*
   @Test
-  @DisplayName("Vérifier que parent 2 est actif et le parent 1 inactif")
-  void getParentDroitAllocation_WhenParent2IsActiveAndHasBiggerSalary_ShouldReturnParent2() {
-    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
-    demande.setParent1ActiviteLucrative(false);
-    demande.setParent2ActiviteLucrative(true);
-    demande.setParent1Salaire(BigDecimal.valueOf(1000.00));
-    demande.setParent2Salaire(BigDecimal.valueOf(2000.00));
-    String resultat = allocationService.getParentDroitAllocation(demande);
-    assertThat(resultat).isEqualTo("Parent2");
-  }
-
-  @Test
-  @DisplayName("Vérifier que les deux parents sont actifs et P1 salaire > P2 salaire")
-  void getParentDroitAllocation_WhenBothParentsAreInactiveButParent1HasBiggerSalary_ShouldReturnParent1(){
+  @DisplayName("Si les 2 parents travaillent, ils ont l'autorité parentale, vivent ensemble, 1 des parents est indépendant, celui qui est salarié a droit aux allocations")
+  void getParentDroitAllocation_WhenBothParentsHaveActivityAndParentalAuthorityAndLiveTogetherAndOneIsIndependent_ShouldReturnParent1() {
     ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
     demande.setParent1ActiviteLucrative(true);
     demande.setParent2ActiviteLucrative(true);
+    demande.setParent1isIndependent(false);
+    demande.setParent2isIndependent(true);
+    demande.setParent1AutoriteParentale(true);
+    demande.setParent2AutoriteParentale(true);
+    demande.setParentsEnsemble(true);
+    demande.setParent1Residence("GE");
+    demande.setParent2Residence("GE");
+    demande.setParent1LieuActivite("VD");
+    demande.setParent2LieuActivite("GE");
+    demande.setEnfantResidence("NE");
+    String resultat = allocationService.getParentDroitAllocation(demande);
+    assertThat(resultat).isEqualTo("Parent1");
+  }
+
+
+  @Test
+  @DisplayName("Si les 2 parents travaillent, ils ont l'autorité parentale, vivent ensemble, sont salariés, celui qui a le plus grand salaire a droit aux allocations")
+  void getParentDroitAllocation_WhenBothParentsHaveActivityAndParentalAuthorityAndLiveTogetherAndBothAreSalaried_ShouldReturnParent1() {
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    demande.setParent1ActiviteLucrative(true);
+    demande.setParent2ActiviteLucrative(true);
+    demande.setParent1isIndependent(false);
+    demande.setParent2isIndependent(false);
+    demande.setParent1AutoriteParentale(true);
+    demande.setParent2AutoriteParentale(true);
+    demande.setParentsEnsemble(true);
+    demande.setParent1Residence("NE");
+    demande.setParent2Residence("NE");
+    demande.setParent1LieuActivite("VD");
+    demande.setParent2LieuActivite("GE");
+    demande.setEnfantResidence("NE");
     demande.setParent1Salaire(BigDecimal.valueOf(2000.00));
     demande.setParent2Salaire(BigDecimal.valueOf(1000.00));
     String resultat = allocationService.getParentDroitAllocation(demande);
@@ -156,37 +174,35 @@ class AllocationServiceTest {
   }
 
   @Test
-  @DisplayName("Vérifier que les deux parents sont inactifs et P1 salaire > P2 salaire")
-  void getParentDroitAllocation_WhenBothParentsAreInactiveButParent2HasBiggerSalary_ShouldReturnParent2(){
+  @DisplayName("Si les 2 parents travaillent, ils ont l'autorité parentale, vivent ensemble, sont les 2 indépendants, celui qui a le plus grand salaire a droit aux allocations")
+    void getParentDroitAllocation_WhenBothParentsHaveActivityAndParentalAuthorityAndLiveTogetherAndBothAreIndependent_ShouldReturnParent1() {
     ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
-    demande.setParent1ActiviteLucrative(false);
-    demande.setParent2ActiviteLucrative(false);
+    demande.setParent1ActiviteLucrative(true);
+    demande.setParent2ActiviteLucrative(true);
+    demande.setParent1isIndependent(true);
+    demande.setParent2isIndependent(true);
+    demande.setParent1AutoriteParentale(true);
+    demande.setParent2AutoriteParentale(true);
+    demande.setParentsEnsemble(true);
+    demande.setParent1Residence("NE");
+    demande.setParent2Residence("NE");
+    demande.setParent1LieuActivite("VD");
+    demande.setParent2LieuActivite("GE");
+    demande.setEnfantResidence("NE");
     demande.setParent1Salaire(BigDecimal.valueOf(2000.00));
     demande.setParent2Salaire(BigDecimal.valueOf(1000.00));
     String resultat = allocationService.getParentDroitAllocation(demande);
-    assertThat(resultat).isEqualTo("Parent2");
-  }
-
-  @Test
-  @DisplayName("Vérifier que les deux parents sont actifs avec un salaire égal")
-  void getParentDroitAllocation_WhenBothParentsAreActiveWithSameSalary_ShouldReturnParent2(){
-    Map<String, Object> params = new HashMap<>();
-    params.put("parent1ActiveLucrative", true);
-    params.put("parent2ActiveLucrative", true);
-    params.put("parent1Salaire",BigDecimal.valueOf(1000.00));
-    params.put("parent2Salaire",BigDecimal.valueOf(1000.00));
-    String resultat = allocationService.getParentDroitAllocation(params);
-    assertThat(resultat).isEqualTo("Parent2");
+    assertThat(resultat).isEqualTo("Parent1");
   }
 
   @Test
   @DisplayName("Tester la méthode sans paramètres")
   void getParentDroitAllocation_WhenNoParametersProvided_ShouldReturnDefaultToParent2() {
-    Map<String, Object> params = new HashMap<>();
-    String result = allocationService.getParentDroitAllocation(params);
+    ParentDroitAllocationDemande demande = new ParentDroitAllocationDemande();
+    String result = allocationService.getParentDroitAllocation(demande);
     assertThat(result).isEqualTo("Parent2");
   }
-*/
+
 }
 
 
