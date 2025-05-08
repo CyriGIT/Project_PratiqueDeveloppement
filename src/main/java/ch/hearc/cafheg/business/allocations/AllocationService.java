@@ -32,23 +32,75 @@ public class AllocationService {
 
   public String getParentDroitAllocation(ParentDroitAllocationDemande demande) {
     System.out.println("Déterminer quel parent a le droit aux allocations");
-    String eR = demande.getEnfantResidence();
-    Boolean p1AL = demande.isParent1ActiviteLucrative();
-    String p1Residence = demande.getParent1Residence();
-    Boolean p2AL = demande.isParent2ActiviteLucrative();
-    String p2Residence = demande.getParent2Residence();
-    Boolean pEnsemble = demande.isParentsEnsemble();
-    BigDecimal salaireP1 = demande.getParent1Salaire();
-    BigDecimal salaireP2 = demande.getParent2Salaire();
 
-    if (p1AL && !p2AL) {
+    if (demande.isParent1ActiviteLucrative() && !demande.isParent2ActiviteLucrative()) {
       return PARENT_1;
     }
 
-    if (p2AL && !p1AL) {
+    if (demande.isParent2ActiviteLucrative() && !demande.isParent1ActiviteLucrative()) {
       return PARENT_2;
     }
 
-    return salaireP1.compareTo(salaireP2) > 0 ? PARENT_1 : PARENT_2;
+    if (demande.isParent1ActiviteLucrative() && demande.isParent2ActiviteLucrative()) {
+      return handleBothParentsActive(demande);
+    }
+
+    return PARENT_2; // Par défaut, retourner Parent2
+  }
+
+  private String handleBothParentsActive(ParentDroitAllocationDemande demande) {
+    if (demande.isParent1AutoriteParentale() && !demande.isParent2AutoriteParentale()) {
+      return PARENT_1;
+    }
+
+    if (!demande.isParent1AutoriteParentale() && demande.isParent2AutoriteParentale()) {
+      return PARENT_2;
+    }
+
+    if (demande.isParent1AutoriteParentale() && demande.isParent2AutoriteParentale()) {
+      if (!demande.isParentsEnsemble()) {
+        return handleSeparatedParents(demande);
+      }
+
+      return handleParentsLivingTogether(demande);
+    }
+
+    return PARENT_2;
+  }
+
+  private String handleSeparatedParents(ParentDroitAllocationDemande demande) {
+    if (demande.getParent1Residence().equals(demande.getEnfantResidence())) {
+      return PARENT_1;
+    }
+
+    if (demande.getParent2Residence().equals(demande.getEnfantResidence())) {
+      return PARENT_2;
+    }
+
+    return PARENT_2; // Par défaut
+  }
+
+  private String handleParentsLivingTogether(ParentDroitAllocationDemande demande) {
+    if (demande.getParent1LieuActivite().equals(demande.getEnfantResidence())) {
+      return PARENT_1;
+    }
+
+    if (demande.getParent2LieuActivite().equals(demande.getEnfantResidence())) {
+      return PARENT_2;
+    }
+
+    if (!demande.isParent1isIndependent() && demande.isParent2isIndependent()) {
+      return PARENT_1;
+    }
+
+    if (demande.isParent1isIndependent() && !demande.isParent2isIndependent()) {
+      return PARENT_2;
+    }
+
+    return compareSalaires(demande);
+  }
+
+  private String compareSalaires(ParentDroitAllocationDemande demande) {
+    return demande.getParent1Salaire().compareTo(demande.getParent2Salaire()) > 0 ? PARENT_1 : PARENT_2;
   }
 }
