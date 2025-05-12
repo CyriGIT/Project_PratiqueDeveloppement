@@ -8,6 +8,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Map;
+
+import ch.hearc.cafheg.utils.Log;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,7 +25,8 @@ public class PDFExporter {
 
   public byte[] generatePDFVversement(Allocataire allocataire,
       Map<LocalDate, Montant> montantParMois) {
-    System.out.println("Génération du PDF des versements");
+    Log.info("Génération du PDF des versements");
+    //System.out.println("Génération du PDF des versements");
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       PDDocument document = new PDDocument();
@@ -62,7 +65,8 @@ public class PDFExporter {
       document.save(baos);
       document.close();
 
-      System.out.println("PDF généré");
+      Log.info("PDF généré");
+      //System.out.println("PDF généré");
       return baos.toByteArray();
 
 
@@ -74,7 +78,8 @@ public class PDFExporter {
 
   public byte[] generatePDFAllocataire(Allocataire allocataire,
       Map<Long, Montant> montantsParEnfant) {
-    System.out.println("Génération du PDF pour un allocataire");
+    Log.info("Génération du PDF pour un allocataire");
+    //System.out.println("Génération du PDF pour un allocataire");
 
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -117,7 +122,8 @@ public class PDFExporter {
       document.save(baos);
       document.close();
 
-      System.out.println("PDF généré");
+      Log.info("PDF généré");
+      //System.out.println("PDF généré");
       return baos.toByteArray();
     } catch (
         IOException e) {
