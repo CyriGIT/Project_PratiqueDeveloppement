@@ -49,7 +49,6 @@ public class AllocataireService {
         }
     }
 
-
     public boolean deleteAllocataireByIdIfNoVersements(long id) {
         Allocataire allocataire = allocataireMapper.findById(id);
         if (allocataire == null) {
