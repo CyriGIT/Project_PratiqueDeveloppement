@@ -23,13 +23,17 @@ public class AllocataireService {
     public void modifyAllocataire(Allocataire newAllocataire) {
         System.out.println("Modifier l'allocataire");
         allocatairesActuels = allocataireMapper.findAll(null);
+
         for (Allocataire a : allocatairesActuels) {
             if (a.getNoAVS().equals(newAllocataire.getNoAVS())) {
-                if (a.getNom().equals(newAllocataire.getNom()) || a.getPrenom().equals(newAllocataire.getPrenom())) {
+                boolean nomChange = !a.getNom().equals(newAllocataire.getNom());
+                boolean prenomChange = !a.getPrenom().equals(newAllocataire.getPrenom());
+
+                if (nomChange || prenomChange) {
                     allocataireMapper.updateAllocataire(newAllocataire);
                     System.out.println("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                 } else {
-                    System.out.println("Aucun changement d'allocataire n'a été effectué");
+                    System.out.println("Aucun changement d'allocataire n'a été détecté");
                 }
                 break;
             }
