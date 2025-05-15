@@ -4,11 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Log4jTest {
-    private static final Logger logger = LogManager.getLogger(Log4jTest.class);
+    private static final Logger logger = LogManager.getLogger("ch.hearc.cafheg.business");
 
     public static void main(String[] args) {
-        logger.debug("Message de débogage : OK");
-        logger.info("Message d'information : OK");
-        logger.error("Message d'erreur : OK");
+        // Messages pour tester l'écriture dans les fichiers de log
+        logger.debug("Message de débogage : écrit dans la console uniquement");
+        logger.info("Message d'information : écrit dans cafheg_{date-jour}.log");
+        logger.error("Message d'erreur : écrit dans err.log");
     }
 }
