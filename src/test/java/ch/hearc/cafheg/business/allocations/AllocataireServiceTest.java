@@ -44,7 +44,7 @@ class AllocataireServiceTest {
     @DisplayName("modifier un allocataire : si le nom ou le prénom n'est pas modifié, l'allocataire n'est pas modifié")
     void modifyAllocataire_IfNameOrFirstNameNotModified_ShouldNotModifyAllocataire() {
         Allocataire allocataire = new Allocataire(new NoAVS("1000-2000"), "Geiser", "Arnaud");
-        Mockito.when(allocataireMapper.findAll(null)).thenReturn(List.of(allocataire));
+        Mockito.when(allocataireMapper.findAll(allocataire.getNom())).thenReturn(List.of(allocataire));
 
         Allocataire newAllocataire = new Allocataire(new NoAVS("1000-2000"), "Geiser", "Arnaud");
         allocataireService.modifyAllocataire(newAllocataire);

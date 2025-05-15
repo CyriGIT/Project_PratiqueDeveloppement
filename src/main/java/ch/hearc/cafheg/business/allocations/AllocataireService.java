@@ -24,10 +24,19 @@ public class AllocataireService {
         System.out.println("Modifier l'allocataire");
         allocatairesActuels = allocataireMapper.findAll(null);
 
+        boolean nomChange = false;
+        boolean prenomChange = false;
+
         for (Allocataire a : allocatairesActuels) {
             if (a.getNoAVS().equals(newAllocataire.getNoAVS())) {
-                boolean nomChange = !a.getNom().equals(newAllocataire.getNom());
-                boolean prenomChange = !a.getPrenom().equals(newAllocataire.getPrenom());
+
+                String nomDb = a.getNom().trim();
+                String nomNew = newAllocataire.getNom().trim();
+                String prenomDb = a.getPrenom().trim();
+                String prenomNew = newAllocataire.getPrenom().trim();
+
+                nomChange = !nomDb.equalsIgnoreCase(nomNew);
+                prenomChange = !prenomDb.equalsIgnoreCase(prenomNew);
 
                 if (nomChange || prenomChange) {
                     allocataireMapper.updateAllocataire(newAllocataire);
