@@ -43,8 +43,9 @@ public class AllocataireMapper extends Mapper {
         while (resultSet.next()) {
           System.out.println("ResultSet#next");
           allocataires
-                  .add(new Allocataire(new NoAVS(resultSet.getString(3)), resultSet.getString(2),
-                          resultSet.getString(1)));
+                  .add(new Allocataire(new NoAVS(resultSet.getString(3)),
+                          resultSet.getString(1),
+                          resultSet.getString(2)));
         }
       }
       System.out.println("Allocataires trouvés " + allocataires.size());
@@ -81,6 +82,7 @@ public class AllocataireMapper extends Mapper {
       preparedStatement.setString(2, allocataire.getPrenom());
       preparedStatement.setString(3, allocataire.getNoAVS().getValue());
       preparedStatement.executeUpdate();
+      System.out.println("Mise à jour effectué de l'allocataire : " + allocataire.getNom() + " " + allocataire.getPrenom());
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }

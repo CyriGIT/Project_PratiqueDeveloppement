@@ -23,18 +23,32 @@ public class AllocataireService {
     public void modifyAllocataire(Allocataire newAllocataire) {
         System.out.println("Modifier l'allocataire");
         allocatairesActuels = allocataireMapper.findAll(null);
+
+        boolean nomChange = false;
+        boolean prenomChange = false;
+
         for (Allocataire a : allocatairesActuels) {
             if (a.getNoAVS().equals(newAllocataire.getNoAVS())) {
-                if (a.getNom().equals(newAllocataire.getNom()) || a.getPrenom().equals(newAllocataire.getPrenom())) {
+
+                String nomDb = a.getNom().trim();
+                String nomNew = newAllocataire.getNom().trim();
+                String prenomDb = a.getPrenom().trim();
+                String prenomNew = newAllocataire.getPrenom().trim();
+
+                nomChange = !nomDb.equalsIgnoreCase(nomNew);
+                prenomChange = !prenomDb.equalsIgnoreCase(prenomNew);
+
+                if (nomChange || prenomChange) {
                     allocataireMapper.updateAllocataire(newAllocataire);
                     System.out.println("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                 } else {
-                    System.out.println("Aucun changement d'allocataire n'a été effectué");
+                    System.out.println("Aucun changement d'allocataire n'a été détecté");
                 }
                 break;
             }
         }
     }
+
 
     public boolean deleteAllocataireByIdIfNoVersements(long id) {
         Allocataire allocataire = allocataireMapper.findById(id);

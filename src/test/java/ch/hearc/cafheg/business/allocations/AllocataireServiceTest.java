@@ -41,6 +41,18 @@ class AllocataireServiceTest {
     }
 
     @Test
+    @DisplayName("modifier un allocataire : si le nom ou le prénom n'est pas modifié, l'allocataire n'est pas modifié")
+    void modifyAllocataire_IfNameOrFirstNameNotModified_ShouldNotModifyAllocataire() {
+        Allocataire allocataire = new Allocataire(new NoAVS("1000-2000"), "Geiser", "Arnaud");
+        Mockito.when(allocataireMapper.findAll(allocataire.getNom())).thenReturn(List.of(allocataire));
+
+        Allocataire newAllocataire = new Allocataire(new NoAVS("1000-2000"), "Geiser", "Arnaud");
+        allocataireService.modifyAllocataire(newAllocataire);
+
+        Mockito.verify(allocataireMapper, Mockito.never()).updateAllocataire(Mockito.any());
+    }
+
+    @Test
     @DisplayName("deleteAllocataireByIdIfNoVersements : l'allocataire est supprimé s'il n'a pas de versements")
     void deleteAllocataire_ShouldDeleteIfNoVersements() {
         long id = 1L;

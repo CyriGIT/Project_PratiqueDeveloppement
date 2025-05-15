@@ -6,6 +6,12 @@ public class Allocataire {
   private final String nom;
   private final String prenom;
 
+  public Allocataire() {
+      this.nom = null;
+      this.prenom = null;
+      this.noAVS = null;
+  }
+
   public Allocataire(NoAVS noAVS, String nom, String prenom) {
     this.noAVS = noAVS;
     this.nom = nom;
