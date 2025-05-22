@@ -17,7 +17,8 @@ public class AllocataireService {
     }
 
     public List<Allocataire> findAllAllocataires(String likeNom) {
-        System.out.println("Rechercher tous les allocataires");
+        Log.info("Rechercher tous les allocataires");
+        //System.out.println("Rechercher tous les allocataires");
         return allocataireMapper.findAll(likeNom);
     }
 
@@ -32,7 +33,7 @@ public class AllocataireService {
                     Log.info("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                     //System.out.println("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                 } else {
-                    Log.info("Aucun changement d'allocataire n'a été effectué");
+                    Log.warn("Aucun changement d'allocataire n'a été effectué");
                     //System.out.println("Aucun changement d'allocataire n'a été effectué");
                 }
                 break;
@@ -43,7 +44,7 @@ public class AllocataireService {
     public boolean deleteAllocataireByIdIfNoVersements(long id) {
         Allocataire allocataire = allocataireMapper.findById(id);
         if (allocataire == null) {
-            Log.warn("Allocataire introuvable");
+            Log.warn("Allocataire introuvable" + " : " + id);
             throw new NoSuchElementException("Allocataire introuvable");
         }
         if (versementMapper.hasVersementsForAllocataire(id)) {

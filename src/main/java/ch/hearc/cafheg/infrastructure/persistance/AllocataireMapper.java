@@ -98,6 +98,7 @@ public class AllocataireMapper extends Mapper {
       preparedStatement.setString(3, allocataire.getNoAVS().getValue());
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
+      Log.error("Erreur lors de la mise à jour de l'allocataire" + e.getMessage());
       throw new RuntimeException(e);
     }
   }

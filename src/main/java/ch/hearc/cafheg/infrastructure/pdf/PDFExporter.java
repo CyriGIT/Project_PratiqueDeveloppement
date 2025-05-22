@@ -127,6 +127,7 @@ public class PDFExporter {
       return baos.toByteArray();
     } catch (
         IOException e) {
+        Log.error("Erreur lors de la génération du PDF : " + e.getMessage());
       throw new RuntimeException(e);
     }
   }
