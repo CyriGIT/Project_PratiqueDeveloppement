@@ -52,6 +52,22 @@ public class Database {
     }
   }
 
+  public static void setConnection(Connection conn) {
+    connection.set(conn);
+  }
+
+  public static void closeConnection() {
+    try {
+      if (connection.get() != null && !connection.get().isClosed()) {
+        connection.get().close();
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException("Erreur lors de la fermeture de la connexion", e);
+    } finally {
+      connection.remove();
+    }
+  }
+
   DataSource dataSource() {
     return dataSource;
   }
