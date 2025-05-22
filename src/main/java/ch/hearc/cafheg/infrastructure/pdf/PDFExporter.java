@@ -72,6 +72,7 @@ public class PDFExporter {
 
     } catch (
         IOException e) {
+      Log.error("Erreur dans la generation" + e.getMessage());
       throw new RuntimeException(e);
     }
   }

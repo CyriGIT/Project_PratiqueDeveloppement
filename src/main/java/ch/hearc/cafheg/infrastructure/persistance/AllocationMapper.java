@@ -18,7 +18,7 @@ public class AllocationMapper extends Mapper {
   private static final String QUERY_FIND_ALL = "SELECT * FROM ALLOCATIONS";
 
   public List<Allocation> findAll() {
-    Log.debug("findAll");
+    Log.info("Recherche de toutes les allocations");
     //System.out.println("Recherche de toutes les allocations");
 
     Connection connection = activeJDBCConnection();
@@ -30,7 +30,7 @@ public class AllocationMapper extends Mapper {
       ResultSet resultSet = preparedStatement.executeQuery();
       List<Allocation> allocations = new ArrayList<>();
       while (resultSet.next()) {
-        Log.debug("resultSet#next");
+        Log.trace("resultSet#next");
         //System.out.println("resultSet#next");
         allocations.add(
             new Allocation(new Montant(resultSet.getBigDecimal(2)),
