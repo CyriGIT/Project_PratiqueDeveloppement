@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <VERSEMENTS NUMERO="1" MONTANT="1000.00" DATE_VERSEMENT="2023-01-15" MOIS_VERSEMENT="2023-01-01" FK_ALLOCATAIRES="1"/>
+</dataset>

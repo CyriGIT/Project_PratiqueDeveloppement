@@ -59,7 +59,7 @@ public class AllocataireMapper extends Mapper {
   }
 
   public Allocataire findById(long id) {
-    Log.info("findById " + id);
+    Log.debug("findById " + id);
     Connection connection = activeJDBCConnection();
     try {
       Log.debug("SQL:" + QUERY_FIND_WHERE_NUMERO);
@@ -72,7 +72,7 @@ public class AllocataireMapper extends Mapper {
       return new Allocataire(new NoAVS(resultSet.getString(1)),
               resultSet.getString(2), resultSet.getString(3));
     } catch (SQLException e) {
-      Log.error("Allocataire introuvable" + e.getMessage());
+      Log.error("Allocataire introuvable: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }
