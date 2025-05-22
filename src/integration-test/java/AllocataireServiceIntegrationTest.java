@@ -84,13 +84,13 @@ public class AllocataireServiceIntegrationTest {
         // Test de la suppression de l'allocataire 2 qui n'a pas de versement
         boolean resultat = allocataireService.deleteAllocataireByIdIfNoVersements(2L);
 
-        // Vérification que la suppression a réussi
-        Assertions.assertThat(resultat).isTrue();
-        Assertions.assertThat(allocataireMapper.findById(2L)).isNull();
-
         // Créer une nouvelle connexion pour vérifier le résultat
         Connection newConnection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
         Database.setConnection(newConnection);
+
+        // Vérification que la suppression a réussi
+        Assertions.assertThat(resultat).isTrue();
+        Assertions.assertThat(allocataireMapper.findById(2L)).isNull();
     }
 
     @Test
@@ -111,13 +111,13 @@ public class AllocataireServiceIntegrationTest {
         // Test de la suppression de l'allocataire 1 qui a un versement
         boolean resultat = allocataireService.deleteAllocataireByIdIfNoVersements(1L);
 
-        // Vérification que la suppression a échoué
-        Assertions.assertThat(resultat).isFalse();
-        Assertions.assertThat(allocataireMapper.findById(1L)).isNotNull();
-
         // Créer une nouvelle connexion pour vérifier le résultat
         Connection newConnection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
         Database.setConnection(newConnection);
+
+        // Vérification que la suppression a échoué
+        Assertions.assertThat(resultat).isFalse();
+        Assertions.assertThat(allocataireMapper.findById(1L)).isNotNull();
     }
 
     @Test

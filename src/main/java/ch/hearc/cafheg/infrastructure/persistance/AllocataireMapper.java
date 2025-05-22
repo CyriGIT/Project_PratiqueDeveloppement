@@ -67,23 +67,22 @@ public class AllocataireMapper extends Mapper {
 
   public Allocataire findById(long id) {
     Log.debug("findById " + id);
-    //System.out.println("findById() " + id);
     Connection connection = activeJDBCConnection();
     try {
       Log.debug("SQL:" + QUERY_FIND_WHERE_NUMERO);
-      //System.out.println("SQL:" + QUERY_FIND_WHERE_NUMERO);
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_WHERE_NUMERO);
       preparedStatement.setLong(1, id);
       ResultSet resultSet = preparedStatement.executeQuery();
       Log.debug("ResultSet#next");
-      //System.out.println("ResultSet#next");
-      resultSet.next();
+      if (!resultSet.next()) {
+        // Aucun allocataire trouvé avec cet ID
+        return null;
+      }
       Log.debug("Allocataire mapping");
-      //System.out.println("Allocataire mapping");
       return new Allocataire(new NoAVS(resultSet.getString(1)),
               resultSet.getString(2), resultSet.getString(3));
     } catch (SQLException e) {
-      Log.error("Allocataire introuvable" + e.getMessage());
+      Log.error("Allocataire introuvable: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }
