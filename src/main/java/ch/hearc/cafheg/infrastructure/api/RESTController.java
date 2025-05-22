@@ -5,6 +5,7 @@ import static ch.hearc.cafheg.infrastructure.persistance.Database.inTransaction;
 import ch.hearc.cafheg.business.allocations.Allocataire;
 import ch.hearc.cafheg.business.allocations.Allocation;
 import ch.hearc.cafheg.business.allocations.AllocationService;
+import ch.hearc.cafheg.business.allocations.AllocataireService;
 import ch.hearc.cafheg.business.allocations.ParentDroitAllocationDemande;
 import ch.hearc.cafheg.business.versements.VersementService;
 import ch.hearc.cafheg.infrastructure.pdf.PDFExporter;
@@ -23,8 +24,10 @@ public class RESTController {
 
   private final AllocationService allocationService;
   private final VersementService versementService;
+  private final AllocataireService allocataireService;
 
   public RESTController() {
+    this.allocataireService = new AllocataireService(new AllocataireMapper(), new VersementMapper());
     this.allocationService = new AllocationService(new AllocataireMapper(), new AllocationMapper());
     this.versementService = new VersementService(new VersementMapper(), new AllocataireMapper(),
         new PDFExporter(new EnfantMapper()));
@@ -78,5 +81,16 @@ public class RESTController {
   @GetMapping(value = "/allocataires/{allocataireId}/versements", produces = MediaType.APPLICATION_PDF_VALUE)
   public byte[] pdfVersements(@PathVariable("allocataireId") int allocataireId) {
     return inTransaction(() -> versementService.exportPDFVersements(allocataireId));
+  }
+  @PutMapping("/allocataires")
+  public void modifyAllocataire(@RequestBody Allocataire newAllocataire) {
+    inTransaction(() -> {
+      allocataireService.modifyAllocataire(newAllocataire);
+      return null;
+    });
+  }
+  @DeleteMapping("/allocataires/{id}")
+  public boolean deleteAllocataire(@PathVariable("id") long id) {
+    return inTransaction(() -> allocataireService.deleteAllocataireByIdIfNoVersements(id));
   }
 }

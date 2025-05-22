@@ -26,15 +26,29 @@ public class AllocataireService {
         Log.info("Modifier l'allocataire");
         //System.out.println("Modifier l'allocataire");
         allocatairesActuels = allocataireMapper.findAll(null);
+
+        boolean nomChange = false;
+        boolean prenomChange = false;
+
         for (Allocataire a : allocatairesActuels) {
             if (a.getNoAVS().equals(newAllocataire.getNoAVS())) {
-                if (a.getNom().equals(newAllocataire.getNom()) || a.getPrenom().equals(newAllocataire.getPrenom())) {
+
+                String nomDb = a.getNom().trim();
+                String nomNew = newAllocataire.getNom().trim();
+                String prenomDb = a.getPrenom().trim();
+                String prenomNew = newAllocataire.getPrenom().trim();
+
+                nomChange = !nomDb.equalsIgnoreCase(nomNew);
+                prenomChange = !prenomDb.equalsIgnoreCase(prenomNew);
+
+                if (nomChange || prenomChange) {
                     allocataireMapper.updateAllocataire(newAllocataire);
                     Log.info("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                     //System.out.println("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                 } else {
                     Log.warn("Aucun changement d'allocataire n'a été effectué");
                     //System.out.println("Aucun changement d'allocataire n'a été effectué");
+
                 }
                 break;
             }
