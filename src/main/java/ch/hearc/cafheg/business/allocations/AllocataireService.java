@@ -1,6 +1,7 @@
 package ch.hearc.cafheg.business.allocations;
 import ch.hearc.cafheg.infrastructure.persistance.AllocataireMapper;
 import ch.hearc.cafheg.infrastructure.persistance.VersementMapper;
+import ch.hearc.cafheg.utils.Log;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,12 +17,14 @@ public class AllocataireService {
     }
 
     public List<Allocataire> findAllAllocataires(String likeNom) {
-        System.out.println("Rechercher tous les allocataires");
+        Log.info("Rechercher tous les allocataires");
+        //System.out.println("Rechercher tous les allocataires");
         return allocataireMapper.findAll(likeNom);
     }
 
     public void modifyAllocataire(Allocataire newAllocataire) {
-        System.out.println("Modifier l'allocataire");
+        Log.info("Modifier l'allocataire");
+        //System.out.println("Modifier l'allocataire");
         allocatairesActuels = allocataireMapper.findAll(null);
 
         boolean nomChange = false;
@@ -40,9 +43,12 @@ public class AllocataireService {
 
                 if (nomChange || prenomChange) {
                     allocataireMapper.updateAllocataire(newAllocataire);
-                    System.out.println("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
+                    Log.info("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
+                    //System.out.println("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                 } else {
-                    System.out.println("Aucun changement d'allocataire n'a été détecté");
+                    Log.warn("Aucun changement d'allocataire n'a été effectué");
+                    //System.out.println("Aucun changement d'allocataire n'a été effectué");
+
                 }
                 break;
             }
@@ -52,6 +58,7 @@ public class AllocataireService {
     public boolean deleteAllocataireByIdIfNoVersements(long id) {
         Allocataire allocataire = allocataireMapper.findById(id);
         if (allocataire == null) {
+            Log.warn("Allocataire introuvable" + " : " + id);
             throw new NoSuchElementException("Allocataire introuvable");
         }
         if (versementMapper.hasVersementsForAllocataire(id)) {

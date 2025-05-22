@@ -2,9 +2,9 @@ package ch.hearc.cafheg.business.allocations;
 
 import ch.hearc.cafheg.infrastructure.persistance.AllocataireMapper;
 import ch.hearc.cafheg.infrastructure.persistance.AllocationMapper;
-import java.math.BigDecimal;
+import ch.hearc.cafheg.utils.Log;
+
 import java.util.List;
-import java.util.Map;
 
 public class AllocationService {
 
@@ -22,7 +22,8 @@ public class AllocationService {
   }
 
   public List<Allocataire> findAllAllocataires(String likeNom) {
-    System.out.println("Rechercher tous les allocataires");
+    Log.info("Rechercher tous les allocataires");
+    //System.out.println("Rechercher tous les allocataires");
     return allocataireMapper.findAll(likeNom);
   }
 
@@ -31,7 +32,8 @@ public class AllocationService {
   }
 
   public String getParentDroitAllocation(ParentDroitAllocationDemande demande) {
-    System.out.println("Déterminer quel parent a le droit aux allocations");
+    Log.info("Déterminer quel parent a le droit aux allocations");
+    //System.out.println("Déterminer quel parent a le droit aux allocations");
 
     if (demande.isParent1ActiviteLucrative() && !demande.isParent2ActiviteLucrative()) {
       return PARENT_1;

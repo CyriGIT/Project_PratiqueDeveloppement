@@ -2,3 +2,4 @@ out/
 target/
 *.iml
 .idea/
+/logs/application.log
