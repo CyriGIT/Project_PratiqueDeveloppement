@@ -1,4 +1,6 @@
+import ch.hearc.cafheg.business.allocations.Allocataire;
 import ch.hearc.cafheg.business.allocations.AllocataireService;
+import ch.hearc.cafheg.business.allocations.NoAVS;
 import ch.hearc.cafheg.infrastructure.persistance.AllocataireMapper;
 import ch.hearc.cafheg.infrastructure.persistance.VersementMapper;
 import ch.hearc.cafheg.infrastructure.persistance.Database;
@@ -19,6 +21,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
 import org.dbunit.dataset.CompositeDataSet;
 
 public class AllocataireServiceIntegrationTest {
@@ -30,7 +34,6 @@ public class AllocataireServiceIntegrationTest {
 
     private AllocataireService allocataireService;
     private AllocataireMapper allocataireMapper;
-    private VersementMapper versementMapper;
     private IDatabaseTester databaseTester;
 
     @BeforeEach
@@ -42,7 +45,7 @@ public class AllocataireServiceIntegrationTest {
         try (Statement stmt = connection.createStatement()) {
             // Exécution du script schema.sql
             String schema = new String(
-                    getClass().getResourceAsStream("/schema.sql").readAllBytes(),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/schema.sql")).readAllBytes(),
                     StandardCharsets.UTF_8
             );
 
@@ -59,7 +62,7 @@ public class AllocataireServiceIntegrationTest {
 
         // Initialisation des mappers et du service
         allocataireMapper = new AllocataireMapper();
-        versementMapper = new VersementMapper();
+        VersementMapper versementMapper = new VersementMapper();
         allocataireService = new AllocataireService(allocataireMapper, versementMapper);
     }
 
@@ -133,4 +136,38 @@ public class AllocataireServiceIntegrationTest {
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("Allocataire introuvable");
     }
+
+    @Test
+    public void testModificationAllocataire() throws Exception {
+        // Chargement des données de test
+        IDataSet allocataireDataSet = new FlatXmlDataSetBuilder().build(
+                getClass().getResourceAsStream("/allocataire.xml"));
+
+        databaseTester.setDataSet(allocataireDataSet);
+        databaseTester.onSetup();
+
+        // Création d'un allocataire avec le même NoAVS que l'allocataire #1 mais avec des valeurs modifiées
+        Allocataire allocataireModifie = new Allocataire(
+                new NoAVS("7561558534397"), // NoAVS de l'allocataire existant
+                "NouveauNom",
+                "NouveauPrenom"
+        );
+
+        // Appel de la méthode à tester
+        allocataireService.modifyAllocataire(allocataireModifie);
+
+        // Création d'une nouvelle connexion pour vérifier le résultat
+        Connection newConnection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
+        Database.setConnection(newConnection);
+
+        // Récupération de l'allocataire modifié (ID 1)
+        Allocataire allocataireApresModification = allocataireMapper.findById(1L);
+
+        // Vérification que les modifications ont été appliquées
+        Assertions.assertThat(allocataireApresModification).isNotNull();
+        Assertions.assertThat(allocataireApresModification.getNom()).isEqualTo("NouveauNom");
+        Assertions.assertThat(allocataireApresModification.getPrenom()).isEqualTo("NouveauPrenom");
+        Assertions.assertThat(allocataireApresModification.getNoAVS().getValue()).isEqualTo("7561558534397");
+    }
+
 }
