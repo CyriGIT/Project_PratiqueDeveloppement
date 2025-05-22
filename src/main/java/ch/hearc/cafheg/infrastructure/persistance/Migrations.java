@@ -1,5 +1,6 @@
 package ch.hearc.cafheg.infrastructure.persistance;
 
+import ch.hearc.cafheg.utils.Log;
 import org.flywaydb.core.Flyway;
 
 /**
@@ -19,7 +20,8 @@ public class Migrations {
    * Exécution des migrations
    * */
   public void start() {
-    System.out.println("Doing migrations");
+    Log.info("Doing migrations");
+    //System.out.println("Doing migrations");
 
     String location;
     // Pour les tests, on éxécute que les scripts DDL (création de tables)
@@ -36,7 +38,8 @@ public class Migrations {
         .load();
 
     flyway.migrate();
-    System.out.println("Migrations done");
+    Log.info("Migrations done");
+    //System.out.println("Migrations done");
   }
 
 }
