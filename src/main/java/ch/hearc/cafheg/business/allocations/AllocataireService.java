@@ -18,13 +18,11 @@ public class AllocataireService {
 
     public List<Allocataire> findAllAllocataires(String likeNom) {
         Log.info("Rechercher tous les allocataires");
-        //System.out.println("Rechercher tous les allocataires");
         return allocataireMapper.findAll(likeNom);
     }
 
     public void modifyAllocataire(Allocataire newAllocataire) {
         Log.info("Modifier l'allocataire");
-        //System.out.println("Modifier l'allocataire");
         allocatairesActuels = allocataireMapper.findAll(null);
 
         boolean nomChange = false;
@@ -44,11 +42,8 @@ public class AllocataireService {
                 if (nomChange || prenomChange) {
                     allocataireMapper.updateAllocataire(newAllocataire);
                     Log.info("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
-                    //System.out.println("Allocataire modifié : " + newAllocataire.getNom() + " " + newAllocataire.getPrenom());
                 } else {
                     Log.warn("Aucun changement d'allocataire n'a été effectué");
-                    //System.out.println("Aucun changement d'allocataire n'a été effectué");
-
                 }
                 break;
             }

@@ -31,7 +31,6 @@ public class VersementService {
 
   public byte[] exportPDFVersements(long allocataireId) {
     Log.info("Exporter le PDF des versements pour l'allocataire " + allocataireId);
-    //System.out.println("Exporter le PDF des versements pour l'allocataire " + allocataireId);
     List<VersementParentParMois> versementParentEnfantParMois = versementMapper
         .findVersementParentEnfantParMois();
 
@@ -48,7 +47,6 @@ public class VersementService {
 
   public Montant findSommeAllocationNaissanceParAnnee(int year) {
     Log.info("Rechercher la somme des allocations de naissances pour l'année " + year);
-    //System.out.println("Rechercher la somme des allocations de naissances pour l'année " + year);
     List<VersementAllocationNaissance> versements = versementMapper
         .findAllVersementAllocationNaissance();
     return VersementAllocationNaissance.sommeParAnnee(versements, year);
@@ -56,7 +54,6 @@ public class VersementService {
 
   public Montant findSommeAllocationParAnnee(int year) {
     Log.info("Rechercher la somme des allocations " + year);
-    //System.out.println("Rechercher la somme des allocations " + year);
     List<VersementAllocation> versements = versementMapper
         .findAllVersementAllocation();
     return VersementAllocation.sommeParAnnee(versements, year);
@@ -64,7 +61,6 @@ public class VersementService {
 
   public byte[] exportPDFAllocataire(long allocataireId) {
     Log.info("Exporter les PDF pour l'allocataire:  " + allocataireId);
-    //System.out.println("Exporter les PDF pour l'allocataire:  " + allocataireId);
     List<VersementParentEnfant> versements = versementMapper.findVersementParentEnfant();
 
     Map<Long, Montant> montantsParEnfant = versements.stream()
