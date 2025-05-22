@@ -23,7 +23,6 @@ public class AllocationService {
 
   public List<Allocataire> findAllAllocataires(String likeNom) {
     Log.info("Rechercher tous les allocataires");
-    //System.out.println("Rechercher tous les allocataires");
     return allocataireMapper.findAll(likeNom);
   }
 
@@ -33,8 +32,6 @@ public class AllocationService {
 
   public String getParentDroitAllocation(ParentDroitAllocationDemande demande) {
     Log.info("Déterminer quel parent a le droit aux allocations");
-    //System.out.println("Déterminer quel parent a le droit aux allocations");
-
     if (demande.isParent1ActiviteLucrative() && !demande.isParent2ActiviteLucrative()) {
       return PARENT_1;
     }

@@ -5,6 +5,8 @@ import ch.hearc.cafheg.business.versements.VersementAllocation;
 import ch.hearc.cafheg.business.versements.VersementAllocationNaissance;
 import ch.hearc.cafheg.business.versements.VersementParentEnfant;
 import ch.hearc.cafheg.business.versements.VersementParentParMois;
+import ch.hearc.cafheg.utils.Log;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,14 +23,16 @@ public class VersementMapper extends Mapper {
   private final String QUERY_FIND_ALLOCATAIRE_VERSEMENT = "SELECT 1 FROM VERSEMENTS WHERE FK_ALLOCATAIRES = ? LIMIT 1";
 
   public List<VersementAllocationNaissance> findAllVersementAllocationNaissance() {
-    System.out.println("findAllVersementAllocationNaissance()");
+    Log.debug("findAllVersementAllocationNaissance()");
+    //System.out.println("findAllVersementAllocationNaissance()");
     Connection connection = activeJDBCConnection();
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_ALL_ALLOCATIONS_NAISSANCE);
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementAllocationNaissance> versements = new ArrayList<>();
       while (resultSet.next()) {
-        System.out.println("resultSet#next");
+        Log.trace("resultSet#next");
+        //System.out.println("resultSet#next");
         versements.add(
                 new VersementAllocationNaissance(new Montant(resultSet.getBigDecimal(2)),
                         resultSet.getDate(1).toLocalDate()));
@@ -36,19 +40,22 @@ public class VersementMapper extends Mapper {
       }
       return versements;
     } catch (SQLException e) {
+      Log.error("SQLException: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }
 
   public List<VersementAllocation> findAllVersementAllocation() {
-    System.out.println("findAllVersementAllocation()");
+    Log.info("findAllVersementAllocation()");
+    //System.out.println("findAllVersementAllocation()");
     Connection connection = activeJDBCConnection();
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_ALL_VERSEMENTS);
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementAllocation> versements = new ArrayList<>();
       while (resultSet.next()) {
-        System.out.println("resultSet#next");
+        Log.trace("resultSet#next");
+        //System.out.println("resultSet#next");
         versements.add(
                 new VersementAllocation(new Montant(resultSet.getBigDecimal(2)),
                         resultSet.getDate(1).toLocalDate()));
@@ -56,19 +63,22 @@ public class VersementMapper extends Mapper {
       }
       return versements;
     } catch (SQLException e) {
+      Log.error("SQLException: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }
 
   public List<VersementParentEnfant> findVersementParentEnfant() {
-    System.out.println("findVersementParentEnfant()");
+    Log.debug("findVersementParentEnfant()");
+    //System.out.println("findVersementParentEnfant()");
     Connection connection = activeJDBCConnection();
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_ALL_VERSEMENTS_PARENTS_ENFANTS);
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementParentEnfant> versements = new ArrayList<>();
-      System.out.println("resultSet#next");
       while (resultSet.next()) {
+        Log.trace("resultSet#next");
+        //System.out.println("resultSet#next");
         versements.add(
                 new VersementParentEnfant(resultSet.getLong(1), resultSet.getLong(2),
                         new Montant(resultSet.getBigDecimal(3))));
@@ -76,19 +86,22 @@ public class VersementMapper extends Mapper {
       }
       return versements;
     } catch (SQLException e) {
+      Log.error("SQLException: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }
 
   public List<VersementParentParMois> findVersementParentEnfantParMois() {
-    System.out.println("findVersementParentEnfantParMois()");
+    Log.info("findVersementParentEnfantParMois()");
+    //System.out.println("findVersementParentEnfantParMois()");
     Connection connection = activeJDBCConnection();
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_ALL_VERSEMENTS_PARENTS_ENFANTS_PAR_MOIS);
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementParentParMois> versements = new ArrayList<>();
       while (resultSet.next()) {
-        System.out.println("resultSet#next");
+        Log.trace("resultSet#next");
+        //System.out.println("resultSet#next");
         versements.add(
                 new VersementParentParMois(resultSet.getLong(1),
                         new Montant(resultSet.getBigDecimal(2)),
@@ -97,12 +110,14 @@ public class VersementMapper extends Mapper {
       }
       return versements;
     } catch (SQLException e) {
+      Log.error("SQLException: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }
 
   public boolean hasVersementsForAllocataire(long allocataireId) {
-    System.out.println("Check if allocataire has versements");
+    Log.info("Check if allocataire has versements");
+    //System.out.println("Check if allocataire has versements");
     Connection connection = activeJDBCConnection();
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_ALLOCATAIRE_VERSEMENT);
@@ -110,6 +125,7 @@ public class VersementMapper extends Mapper {
       ResultSet resultSet = preparedStatement.executeQuery();
       return resultSet.next(); // true if at least one versement found
     } catch (SQLException e) {
+      Log.error("SQLException: " + e.getMessage());
       throw new RuntimeException(e);
     }
   }

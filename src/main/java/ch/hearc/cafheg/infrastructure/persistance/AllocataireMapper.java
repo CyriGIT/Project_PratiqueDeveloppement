@@ -20,66 +20,55 @@ public class AllocataireMapper extends Mapper {
   private static final String QUERY_DELETE_ALLOCATAIRE =  "DELETE FROM ALLOCATAIRES WHERE NUMERO = ?";
 
   public List<Allocataire> findAll(String likeNom) {
-    Log.debug("findAll() " + likeNom);
-    //System.out.println("findAll() " + likeNom);
+    Log.info("findAll() " + likeNom);
     Connection connection = activeJDBCConnection();
     try {
       PreparedStatement preparedStatement;
       if (likeNom == null) {
         Log.debug("SQL: " + QUERY_FIND_ALL);
-        //System.out.println("SQL: " + QUERY_FIND_ALL);
         preparedStatement = connection
                 .prepareStatement(QUERY_FIND_ALL);
       } else {
 
         Log.debug("SQL: " + QUERY_FIND_WHERE_NOM_LIKE);
-        //System.out.println("SQL: " + QUERY_FIND_WHERE_NOM_LIKE);
         preparedStatement = connection
                 .prepareStatement(QUERY_FIND_WHERE_NOM_LIKE);
         preparedStatement.setString(1, likeNom + "%");
       }
-      Log.debug("Allocation d'un nouveau tableau");
-      //System.out.println("Allocation d'un nouveau tableau");
+      Log.info("Allocation d'un nouveau tableau");
       List<Allocataire> allocataires = new ArrayList<>();
 
-      Log.debug("Exécution de la requête");
-      //System.out.println("Exécution de la requête");
+      Log.info("Exécution de la requête");
       try (ResultSet resultSet = preparedStatement.executeQuery()) {
 
-        Log.debug("Allocataire mapping");
-        //System.out.println("Allocataire mapping");
+        Log.info("Allocataire mapping");
         while (resultSet.next()) {
-          Log.debug("ResultSet#next");
-          //System.out.println("ResultSet#next");
+          Log.trace("ResultSet#next");
           allocataires
                   .add(new Allocataire(new NoAVS(resultSet.getString(3)),
                           resultSet.getString(1),
                           resultSet.getString(2)));
         }
       }
-      Log.debug("Allocataires trouvés " + allocataires.size());
-      //System.out.println("Allocataires trouvés " + allocataires.size());
+      Log.info("Allocataires trouvés " + allocataires.size());
       return allocataires;
     } catch (SQLException e) {
+      Log.error("Erreur lors de recherche des allocataires"  + e.getMessage());
       throw new RuntimeException(e);
     }
   }
 
   public Allocataire findById(long id) {
-    Log.debug("findById " + id);
-    //System.out.println("findById() " + id);
+    Log.info("findById " + id);
     Connection connection = activeJDBCConnection();
     try {
       Log.debug("SQL:" + QUERY_FIND_WHERE_NUMERO);
-      //System.out.println("SQL:" + QUERY_FIND_WHERE_NUMERO);
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_WHERE_NUMERO);
       preparedStatement.setLong(1, id);
       ResultSet resultSet = preparedStatement.executeQuery();
-      Log.debug("ResultSet#next");
-      //System.out.println("ResultSet#next");
+      Log.trace("ResultSet#next");
       resultSet.next();
-      Log.debug("Allocataire mapping");
-      //System.out.println("Allocataire mapping");
+      Log.info("Allocataire mapping");
       return new Allocataire(new NoAVS(resultSet.getString(1)),
               resultSet.getString(2), resultSet.getString(3));
     } catch (SQLException e) {
@@ -89,8 +78,7 @@ public class AllocataireMapper extends Mapper {
   }
 
   public void updateAllocataire(Allocataire allocataire) {
-    Log.debug("updateAllocataire() " + allocataire);
-    //System.out.println("updateAllocataire() " + allocataire);
+    Log.info("updateAllocataire() " + allocataire);
     Connection connection = activeJDBCConnection();
     try {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_UPDATE_ALLOCATAIRE);
@@ -98,7 +86,7 @@ public class AllocataireMapper extends Mapper {
       preparedStatement.setString(2, allocataire.getPrenom());
       preparedStatement.setString(3, allocataire.getNoAVS().getValue());
       preparedStatement.executeUpdate();
-      System.out.println("Mise à jour effectué de l'allocataire : " + allocataire.getNom() + " " + allocataire.getPrenom());
+      Log.info("Mise à jour effectué de l'allocataire : " + allocataire.getNom() + " " + allocataire.getPrenom());
     } catch (SQLException e) {
       Log.error("Erreur lors de la mise à jour de l'allocataire" + e.getMessage());
       throw new RuntimeException(e);
@@ -107,7 +95,6 @@ public class AllocataireMapper extends Mapper {
 
   public void deleteById(Long id) {
     Log.warn("Supprimer l'Allocataire ayant l'id" + id);
-    //System.out.println("Supprimer l'Allocataire ayant l'id" + id);
     try (Connection connection = activeJDBCConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(QUERY_DELETE_ALLOCATAIRE)) {
 

@@ -1,5 +1,6 @@
 package ch.hearc.cafheg.infrastructure.persistance;
 
+import ch.hearc.cafheg.utils.Log;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
@@ -21,6 +22,7 @@ public class Database {
    */
   static Connection activeJDBCConnection() {
     if(connection.get() == null) {
+      Log.error("Pas de connection JDBC active");
       throw new RuntimeException("Pas de connection JDBC active");
     }
     return connection.get();
@@ -33,21 +35,27 @@ public class Database {
    * @return Le résultat de l'éxécution de la fonction
    */
   public static <T> T inTransaction(Supplier<T> inTransaction) {
-    System.out.println("inTransaction#start");
+    Log.debug("inTransaction#start");
+    //System.out.println("inTransaction#start");
     try {
-      System.out.println("inTransaction#getConnection");
+      Log.debug("inTransaction#getConnection");
+      //System.out.println("inTransaction#getConnection");
       connection.set(dataSource.getConnection());
       return inTransaction.get();
     } catch (Exception e) {
+      Log.error("inTransaction#exception " + e.getMessage());
       throw new RuntimeException(e);
     } finally {
       try {
-        System.out.println("inTransaction#closeConnection");
+        Log.debug("inTransaction#closeConnection");
+        //System.out.println("inTransaction#closeConnection");
         connection.get().close();
       } catch (SQLException e) {
+        Log.error("inTransaction#closeConnection " + e.getMessage());
         throw new RuntimeException(e);
       }
-      System.out.println("inTransaction#end");
+      Log.debug("inTransaction#end");
+      //System.out.println("inTransaction#end");
       connection.remove();
     }
   }
@@ -60,12 +68,14 @@ public class Database {
    * Initialisation du pool de connections.
    */
   public void start() {
-    System.out.println("Initializing datasource");
+    Log.info("Initializing datasource");
+    //System.out.println("Initializing datasource");
     HikariConfig config = new HikariConfig();
     config.setJdbcUrl("jdbc:h2:mem:sample");
     config.setMaximumPoolSize(20);
     config.setDriverClassName("org.h2.Driver");
     dataSource = new HikariDataSource(config);
-    System.out.println("Datasource initialized");
+    Log.info("Datasource initialized");
+    //System.out.println("Datasource initialized");
   }
 }
