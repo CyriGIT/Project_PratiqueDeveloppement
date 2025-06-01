@@ -30,7 +30,7 @@ public class AllocationMapper extends Mapper {
       ResultSet resultSet = preparedStatement.executeQuery();
       List<Allocation> allocations = new ArrayList<>();
       while (resultSet.next()) {
-        Log.trace("resultSet#next");
+        Log.debug("resultSet#next");
         //System.out.println("resultSet#next");
         allocations.add(
             new Allocation(new Montant(resultSet.getBigDecimal(2)),

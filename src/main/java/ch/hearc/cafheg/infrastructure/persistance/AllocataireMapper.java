@@ -43,7 +43,7 @@ public class AllocataireMapper extends Mapper {
 
         Log.info("Allocataire mapping");
         while (resultSet.next()) {
-          Log.trace("ResultSet#next");
+          Log.debug("ResultSet#next");
           allocataires
                   .add(new Allocataire(new NoAVS(resultSet.getString(3)),
                           resultSet.getString(1),
@@ -66,7 +66,7 @@ public class AllocataireMapper extends Mapper {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_WHERE_NUMERO);
       preparedStatement.setLong(1, id);
       ResultSet resultSet = preparedStatement.executeQuery();
-      Log.trace("ResultSet#next");
+      Log.debug("ResultSet#next");
       resultSet.next();
       Log.info("Allocataire mapping");
       return new Allocataire(new NoAVS(resultSet.getString(1)),

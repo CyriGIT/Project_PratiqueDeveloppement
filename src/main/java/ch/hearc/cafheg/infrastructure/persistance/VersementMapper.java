@@ -31,7 +31,7 @@ public class VersementMapper extends Mapper {
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementAllocationNaissance> versements = new ArrayList<>();
       while (resultSet.next()) {
-        Log.trace("resultSet#next");
+        Log.debug("resultSet#next");
         //System.out.println("resultSet#next");
         versements.add(
                 new VersementAllocationNaissance(new Montant(resultSet.getBigDecimal(2)),
@@ -54,7 +54,7 @@ public class VersementMapper extends Mapper {
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementAllocation> versements = new ArrayList<>();
       while (resultSet.next()) {
-        Log.trace("resultSet#next");
+        Log.debug("resultSet#next");
         //System.out.println("resultSet#next");
         versements.add(
                 new VersementAllocation(new Montant(resultSet.getBigDecimal(2)),
@@ -77,7 +77,7 @@ public class VersementMapper extends Mapper {
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementParentEnfant> versements = new ArrayList<>();
       while (resultSet.next()) {
-        Log.trace("resultSet#next");
+        Log.debug("resultSet#next");
         //System.out.println("resultSet#next");
         versements.add(
                 new VersementParentEnfant(resultSet.getLong(1), resultSet.getLong(2),
@@ -100,7 +100,7 @@ public class VersementMapper extends Mapper {
       ResultSet resultSet = preparedStatement.executeQuery();
       List<VersementParentParMois> versements = new ArrayList<>();
       while (resultSet.next()) {
-        Log.trace("resultSet#next");
+        Log.debug("resultSet#next");
         //System.out.println("resultSet#next");
         versements.add(
                 new VersementParentParMois(resultSet.getLong(1),
