@@ -13,9 +13,9 @@
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
         </File>
 
-        <!-- Fichier pour les logs info journaliers dans services -->
+        <!-- Editted: Fichier pour les services métiers -->
         <RollingFile name="ServiceFile"
-                     fileName="logs/cafheg_%d{yyyy-MM-dd}.log"
+                     fileName="logs/cafheg.log"
                      filePattern="logs/cafheg_%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"/>
             <Policies>
@@ -24,6 +24,7 @@
             </Policies>
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
         </RollingFile>
+
 
     </Appenders>
 

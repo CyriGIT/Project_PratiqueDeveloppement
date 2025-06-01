@@ -1,0 +1,2 @@
+2025-06-01 18:39:00 INFO  ch.hearc.cafheg.business.logs.Log4jTest - Message d'information : écrit dans cafheg_{date-jour}.log
+2025-06-01 18:39:00 ERROR ch.hearc.cafheg.business.logs.Log4jTest - Message d'erreur : écrit dans err.log
