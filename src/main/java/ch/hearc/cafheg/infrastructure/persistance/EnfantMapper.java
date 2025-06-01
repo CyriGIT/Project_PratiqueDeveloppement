@@ -20,7 +20,7 @@ public class EnfantMapper extends Mapper {
       PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_ENFANT_BY_ID);
       preparedStatement.setLong(1, id);
       ResultSet resultSet = preparedStatement.executeQuery();
-      Log.trace("resultSet#next");
+      Log.debug("resultSet#next");
       resultSet.next();
       return new Enfant(new NoAVS(resultSet.getString(1)),
           resultSet.getString(2), resultSet.getString(3));
